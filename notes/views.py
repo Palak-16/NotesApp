@@ -5,7 +5,22 @@ from django.contrib.auth import login ,authenticate,logout
 from django.contrib import messages  # ✅ Correct import
 from django.contrib.messages import get_messages
 from notes.models import Notes
-import bleach
+
+import re  # Import regex for password validation
+
+def is_valid_password(password):
+    """Function to check password strength."""
+    if len(password) < 8:
+        return "Password must be at least 8 characters long"
+    if not re.search(r'[A-Z]', password):
+        return "Password must contain at least one uppercase letter"
+    if not re.search(r'[a-z]', password):
+        return "Password must contain at least one lowercase letter"
+    if not re.search(r'\d', password):
+        return "Password must contain at least one number"
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return "Password must contain at least one special character"
+    return None  # No errors
 
 # Create your views here.
 def home(request):
@@ -22,6 +37,12 @@ def signup(request):
         password = request.POST.get("password")
         confirmpassword = request.POST.get("confirmpassword")
 
+        # Check if the password is strong
+        password_error = is_valid_password(password)
+        if password_error:
+            messages.error(request, password_error)
+            return redirect('signup')
+        
         if password != confirmpassword:
             messages.error(request, "Passwords do not match")
             return redirect('signup')
