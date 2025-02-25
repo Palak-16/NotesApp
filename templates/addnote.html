@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block navitem %}
+<ul class="nav justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="logout">Logout</a>
+    </li>
+</ul>
+{% endblock navitem %}
+{% block body %}
+
+<!-- Background Styling -->
+<style>
+    body {
+        background: linear-gradient(to right, #ece9e6, #ffffff);
+    }
+    .note-container {
+        width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .btn-custom {
+        background: #007bff;
+        color: white;
+        padding: 12px;
+        font-size: 18px;
+        border-radius: 8px;
+        transition: 0.3s ease-in-out;
+    }
+    .btn-custom:hover {
+        background: #0056b3;
+    }
+    .summernote-container {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+
+<div class="d-flex justify-content-center">
+    <div class="note-container shadow-lg mt-5 mb-3">
+        <h2 class="text-center mb-4">📝 Add Note</h2>
+        <form method="POST" action="/addnote">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input name="title" type="text" id="title" class="form-control" required>
+            </div>
+            
+            <div class="mb-3 summernote-container">
+                <label for="content" class="form-label">Content</label>
+                <textarea name="content" id="summernote" class="form-control" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-custom w-100">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <p class="text-danger text-center">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<!-- Include jQuery (Required for Summernote) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Bootstrap Bundle (Required for Summernote) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Include Summernote CSS & JS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 250,  // Editor height
+            placeholder: 'Write something amazing...',
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview']]
+            ]
+        });
+    });
+</script>
+
+{% endblock body %}

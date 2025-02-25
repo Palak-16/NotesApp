@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block cssbody %}
+<style>
+/* Ensure the main content fills the screen properly */
+main {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Hero Section */
+.hero {
+    width: 100vw;  /* Full viewport width */
+    height: 300px; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('https://source.unsplash.com/1600x900/?notebook,writing') center/cover;
+    color: white;
+}
+
+/* Hero Content */
+.hero-content {
+    max-width: 800px;
+}
+
+/* Features Section */
+.features {
+    padding: 50px 0;
+}
+
+.feature-box {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Footer */
+.footer {
+    background: #343a40;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+}
+</style>
+{% endblock cssbody %}
+
+{% block body %}
+<!-- Main Content Wrapper -->
+<main>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="display-4">Take Notes Anywhere, Anytime</h1>
+            <p class="lead">A simple and secure way to store your notes and ideas.</p>
+            <a href="/signup" class="btn btn-primary btn-lg">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container text-center">
+            <h2>Why Choose NotesApp?</h2>
+            <div class="row mt-4">
+                <div class="col-md-4 feature-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" width="80">
+                    <h4>Easy to Use</h4>
+                    <p>Simple and intuitive design for quick note-taking.</p>
+                </div>
+                <div class="col-md-4 feature-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1804/1804295.png" width="80">
+                    <h4>Secure and Private</h4>
+                    <p>Your notes are safe and only accessible to you.</p>
+                </div>
+                <div class="col-md-4 feature-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1087/1087806.png" width="80">
+                    <h4>Access Anywhere</h4>
+                    <p>Sync notes across all your devices seamlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock body %}

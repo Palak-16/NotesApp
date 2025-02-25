@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block cssbody %}
+<style>
+/* Center the form and add background */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Further reduced height */
+    padding: 10px 0; /* Slight padding to prevent sticking */
+    background: url('https://source.unsplash.com/1600x900/?notebook,workspace') center/cover;
+}
+
+/* Form Styling */
+.signup-form {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 400px;
+}
+
+/* Improve Input Field Appearance */
+.signup-form .form-control {
+    border-radius: 5px;
+    height: 40px;
+}
+
+/* Improve Button */
+.signup-form .btn {
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.signup-form .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Link Styling */
+.signup-form a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-form a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock cssbody %}
+
+{% block navitem %}
+<ul class="nav justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="login">Login</a>
+    </li>
+</ul>   
+{% endblock navitem %} 
+
+{% block body %}
+<div class="signup-container">
+    <div class="signup-form">
+        <h2 class="text-center mb-4">Sign Up</h2>
+        <form method="POST" action="/signup">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input name="username" type="text" id="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input name="email" type="email" id="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input name="phone" type="text" id="phone" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input name="password" type="password" id="password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmpassword" class="form-label">Confirm Password</label>
+                <input name="confirmpassword" type="password" id="confirmpassword" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+        </form>
+        <p class="text-center mt-3">Already have an account? <a href="/login">Login</a></p>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <p style="color: red; text-align: center;">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+{% endblock body %}

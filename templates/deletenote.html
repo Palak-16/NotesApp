@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+{%block navitem%}
+<ul class="nav justify-content-end">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="logout">logout</a>
+    </li>
+</ul>
+{%endblock navitem%}
+{% block body %}
+<div class="p-4 my-4 shadow-lg container" style="width: 450px;">
+    <h2 class="text-center mb-4">Are you sure You Want to Delete this note?</h2>
+    <p><strong>{{ note.title }}</strong></p>
+    <p>{{ note.content }}</p>
+    <form method="POST" action="{% url 'deletenote' note.id %}">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+    <a href="{% url 'notes' %}">Cancel</a>
+</div>
+{% if messages %}
+{% for message in messages %}
+<p style="color: red;">{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endblock body %}
