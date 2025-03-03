@@ -48,8 +48,8 @@
         <form method="POST" action="{% url 'user_login' %}">
             {% csrf_token %}
             <div class="mb-3 text-start">
-                <label for="loginusername" class="form-label">UserName</label>
-                <input name="loginusername" type="text" id="name" class="form-control" required>
+                <label for="loginusernameoremail" class="form-label">Username or Email:</label>
+                <input name="loginusernameoremail" type="text" id="name" class="form-control" required>
             </div>
             <div class="mb-3 text-start">
                 <label for="loginpassword" class="form-label">Password</label>
@@ -61,9 +61,4 @@
     </div>
 </div>
 
-{% if messages %}
-    {% for message in messages %}
-        <p style="color: red;">{{ message }}</p>
-    {% endfor %}
-{% endif %}
 {% endblock body %}

@@ -18,9 +18,5 @@
     </form>
     <a href="{% url 'notes' %}">Cancel</a>
 </div>
-{% if messages %}
-{% for message in messages %}
-<p style="color: red;">{{ message }}</p>
-{% endfor %}
-{% endif %}
+
 {% endblock body %}

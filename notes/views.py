@@ -1,10 +1,11 @@
 from pyexpat.errors import messages
 from django.shortcuts import redirect, render , get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth import login ,authenticate,logout
+from django.contrib.auth import login ,authenticate,logout, get_user_model
 from django.contrib import messages  # ✅ Correct import
 from django.contrib.messages import get_messages
 from notes.models import Notes
+from django.contrib.auth.decorators import login_required
 
 import re  # Import regex for password validation
 
@@ -65,14 +66,25 @@ def user_login(request):
     for _ in storage:
         pass  # This ensures messages are read and cleared
     if request.method == "POST":
-        loginusername = request.POST.get("loginusername")
+        loginusernameoremail = request.POST.get("loginusernameoremail")
         loginpassword = request.POST.get("loginpassword")
 
-        user = authenticate(request, username=loginusername, password=loginpassword)
+        User = get_user_model()
+        try:
+            user = User.objects.get(username=loginusernameoremail)  # Check if username exists
+        except User.DoesNotExist:
+            try:
+                user = User.objects.get(email=loginusernameoremail)  # Check if email exists
+            except User.DoesNotExist:
+                user = None  # No user found
+
+        user = authenticate(request, username=user.username, password=loginpassword)
         if user != None :
             login(request,user)
             messages.success(request, "successfully logged in!")
-            return redirect('notes')
+            next_url = request.GET.get('next', 'notes')  # Redirect to 'notes' or the next URL
+            return redirect(next_url)
+            # return redirect('notes')
         else:
             messages.error(request, "Invalid Credentials")
             return redirect('user_login')
@@ -85,6 +97,7 @@ def user_login(request):
 def loggedin(request):
     return render(request, 'loggedin.html')
 
+@login_required(login_url='user_login')
 def notes(request):
      # Fetch notes only for the logged-in user
     user_notes = Notes.objects.filter(user=request.user).order_by('-created_at')  # Latest first
@@ -93,6 +106,7 @@ def notes(request):
 
     return render(request, 'notes.html', context)
 
+@login_required(login_url='user_login')
 def addnote(request):
     storage = get_messages(request)  # Clear old messages
     for _ in storage:
@@ -109,6 +123,7 @@ def addnote(request):
             messages.error(request, "Invalid Input")
     return render(request, 'addnote.html')
 
+@login_required(login_url='user_login')
 def editnote(request, note_id):
     storage = get_messages(request)  # Clear old messages
     for _ in storage:
@@ -124,6 +139,7 @@ def editnote(request, note_id):
     
     return render(request, 'editnote.html', {'note': note})
 
+@login_required(login_url='user_login')
 def deletenote(request, note_id):
     note = get_object_or_404(Notes, id=note_id, user=request.user)
     if request.method == "POST":
@@ -132,4 +148,10 @@ def deletenote(request, note_id):
         return redirect('notes')
     
     return render(request, 'deletenote.html',{'note': note})
+
+@login_required(login_url='user_login')
+def user_logout(request):
+    logout(request)  # ✅ Logs out the user and clears session
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('user_login')  # Redirect to login page after logout
 
